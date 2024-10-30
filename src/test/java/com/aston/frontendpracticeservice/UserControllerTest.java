@@ -48,4 +48,25 @@ public class UserControllerTest extends TestContainersConfig {
                 .andExpect(content().contentType("application/json"));
     }
 
+    @Test
+    public void getUserByFirstAndLastName() throws Exception {
+        mockMvc.perform(get(URL_TO_GET_USER_BY_FIRST_AND_LAST_NAME + "?firstName=Sergey&lastName=Bichan"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(content().json(CORRECT_JSON_FOR_USER));
+    }
+
+    @Test
+    public void getErrorWhenTryToGetUserByNotCoorectFirstAndLastName() throws Exception {
+        mockMvc.perform(get(URL_TO_GET_USER_BY_FIRST_AND_LAST_NAME + "?firstName=Ignat&lastName=Igor"))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType("application/json"));
+    }
+
+    @Test
+    public void getUserWithIncorrectRequest() throws Exception{
+        mockMvc.perform(get(URL_TO_GET_USER_BY_FIRST_AND_LAST_NAME + "?car=Ford&999999999=123"))
+                .andExpect(status().isBadRequest());
+    }
+
 }
