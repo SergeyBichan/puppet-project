@@ -2,7 +2,6 @@ package com.aston.frontendpracticeservice.controller;
 
 import com.aston.frontendpracticeservice.domain.dto.UserDto;
 import com.aston.frontendpracticeservice.service.UserService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
