@@ -1,7 +1,6 @@
 package com.aston.frontendpracticeservice.controller;
 
 import com.aston.frontendpracticeservice.domain.dto.UserDto;
-import com.aston.frontendpracticeservice.domain.entity.User;
 import com.aston.frontendpracticeservice.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
