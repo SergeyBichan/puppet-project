@@ -7,7 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static com.aston.frontendpracticeservice.constants.ConstantsForTest.*;
+import static com.aston.frontendpracticeservice.constants.ConstantsForTest.CORRECT_JSON_FOR_USER;
+import static com.aston.frontendpracticeservice.constants.ConstantsForTest.URL_TO_GET_ALL_USERS;
+import static com.aston.frontendpracticeservice.constants.ConstantsForTest.CORRECT_JSON_FOR_ALL_USERS;
+import static com.aston.frontendpracticeservice.constants.ConstantsForTest.URL_TO_GET_USER_BY_ID;
+import static com.aston.frontendpracticeservice.constants.ConstantsForTest.URL_TO_GET_USER_BY_FIRST_AND_LAST_NAME;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
