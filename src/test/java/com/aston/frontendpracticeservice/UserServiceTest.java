@@ -7,29 +7,35 @@ import com.aston.frontendpracticeservice.service.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
 import java.util.List;
 
+import static org.mockito.Mockito.when;
+
 @SpringBootTest
 public class UserServiceTest extends TestContainersConfig {
 
     @Autowired
     private UserService service;
-
+    @Mock
+   private UserService userService1;
     UserDto testUser = UserDto.builder()
             .id(1L)
             .firstName("Sergey")
             .lastName("Bichan")
-            .birthDate(LocalDate.of(1990,7,3))
+            .birthDate(LocalDate.of(1990, 7, 3))
             .inn("123461234562")
             .snils("13465443243")
             .passportNumber("dsad1231231")
             .login("admin")
             .password("admin")
             .build();
+    @Autowired
+    private UserService userService;
 
     @Test
     @DisplayName("Тест для проверки существующего пользователя в БД")
@@ -61,6 +67,24 @@ public class UserServiceTest extends TestContainersConfig {
         Assertions.assertEquals(userDtoList, all);
     }
 
+
+    /**
+     * Как бы и не интеграционный получается, потому что данные у меня заполняют тестовую бд в контейнере с помощью ликвибейза
+     */
+    @Test
+    @DisplayName("Проверка на пустой список пользователей")
+    public void shouldReturnEmptyList() {
+
+        when(userService1.findAll()).thenThrow(new UserNotFoundException("User not found"));
+
+        Exception exception = Assertions.assertThrows(UserNotFoundException.class, () -> userService1.findAll());
+
+        String expectedMessage = "User not found";
+        String actualMessage = exception.getMessage();
+
+        Assertions.assertTrue(expectedMessage.contains(actualMessage));
+
+    }
 
 
 }
