@@ -2,6 +2,7 @@ package com.aston.frontendpracticeservice;
 
 import com.aston.frontendpracticeservice.config.TestContainersConfig;
 import com.aston.frontendpracticeservice.domain.dto.UserDto;
+import com.aston.frontendpracticeservice.domain.entity.User;
 import com.aston.frontendpracticeservice.exception.UserNotFoundException;
 import com.aston.frontendpracticeservice.service.UserService;
 import org.junit.jupiter.api.Assertions;
@@ -68,7 +69,8 @@ public class UserServiceTest extends TestContainersConfig {
 
 
     /**
-     * Как бы и не интеграционный получается, потому что данные у меня заполняют тестовую бд в контейнере с помощью ликвибейза
+     * Как бы и не интеграционный получается, потому что данные у меня заполняют
+     * тестовую бд в контейнере с помощью ликвибейза
      */
     @Test
     @DisplayName("Проверка на пустой список пользователей")
@@ -82,8 +84,59 @@ public class UserServiceTest extends TestContainersConfig {
         String actualMessage = exception.getMessage();
 
         Assertions.assertTrue(expectedMessage.contains(actualMessage));
-
     }
 
 
+    @Test
+    @DisplayName("Проверка наличия пользователя с конкретным логином")
+    public void shouldReturnUserWithExistLogin() {
+
+        User fromDb = service.findByLogin("admin");
+        UserDto dto = UserDto.builder()
+                .id(fromDb.getId())
+                .firstName(fromDb.getFirstName())
+                .lastName(fromDb.getLastName())
+                .birthDate(LocalDate.of(1990, 7, 3))
+                .inn(fromDb.getInn())
+                .passportNumber(fromDb.getPassportNumber())
+                .password(fromDb.getPassword())
+                .snils(fromDb.getSnils())
+                .login(fromDb.getLogin())
+                .build();
+
+        Assertions.assertEquals(dto, testUser);
+    }
+
+    @Test
+    @DisplayName("Проверка на не существующего пользователя с конкретным логином")
+    public void shouldReturnExceptionUserNotFoundExceptionWithNotExistedUser(){
+        Exception exception = Assertions.assertThrows(UserNotFoundException.class,
+                () -> service.findByLogin("карасик"));
+
+        String expectedMessage = "User not found";
+        String actualMessage = exception.getMessage();
+
+        Assertions.assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    @DisplayName("Проверка на наличие поьзователя в БД по имени и фамилии")
+    public void shouldReturnExistUserFromDbWithFirstNameAndLasName(){
+        UserDto fromDb = service.findByFirstAndLastName("Sergey", "Bichan");
+
+        Assertions.assertEquals(testUser, fromDb);
+    }
+
+
+    @Test
+    @DisplayName("Проверка на отсутствие пользователя в БД по имени и фамилии")
+    public void shouldReturnExceptionWithNoExistUserInDb() {
+        Exception exception = Assertions.assertThrows(UserNotFoundException.class,
+                () -> service.findByFirstAndLastName("Дед", "Непомогайло"));
+
+        String expectedMessage = "User with firstname:" + "Дед" + " and lastname: " + "Непомогайло" + " not found";
+        String actualMessage = exception.getMessage();
+
+        Assertions.assertTrue(actualMessage.contains(expectedMessage));
+    }
 }
