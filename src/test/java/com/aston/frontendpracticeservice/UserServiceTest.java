@@ -22,7 +22,8 @@ public class UserServiceTest extends TestContainersConfig {
     @Autowired
     private UserService service;
     @Mock
-   private UserService userService1;
+    private UserService userService1;
+
     UserDto testUser = UserDto.builder()
             .id(1L)
             .firstName("Sergey")
@@ -34,8 +35,6 @@ public class UserServiceTest extends TestContainersConfig {
             .login("admin")
             .password("admin")
             .build();
-    @Autowired
-    private UserService userService;
 
     @Test
     @DisplayName("Тест для проверки существующего пользователя в БД")
