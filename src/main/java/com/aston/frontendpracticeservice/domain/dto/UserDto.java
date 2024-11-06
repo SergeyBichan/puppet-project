@@ -14,6 +14,9 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.util.Set;
 
+import static com.aston.frontendpracticeservice.domain.dto.validation.Constants.INN_CORRECT_FORMAT;
+import static com.aston.frontendpracticeservice.domain.dto.validation.Constants.SNILS_CORRECT_FORMAT;
+
 @Getter
 @Setter
 @Builder
@@ -29,10 +32,10 @@ public class UserDto {
     @Past(message = "Неверная дата")
     private LocalDate birthDate;
     @NotBlank(message = "ИНН не может быть пустым")
-    @Pattern(regexp = "\\{12}", message = "ИНН должен содержать не менее 12 цифр")
+    @Pattern(regexp = INN_CORRECT_FORMAT, message = "ИНН должен содержать не менее 12 цифр")
     private String inn;
     @NotBlank(message = "СНИЛС не может быть пустым")
-    @Pattern(regexp = "\\{11}", message = "СНИЛС должен содержать не менее 11 цифр")
+    @Pattern(regexp = SNILS_CORRECT_FORMAT, message = "СНИЛС должен содержать не менее 11 цифр")
     private String snils;
     @NotBlank(message = "Номер паспорта не может быть пустым")
     @Size(min = 8, max = 20, message = "Номер паспорта должен содержать от 8 до 20 символов")

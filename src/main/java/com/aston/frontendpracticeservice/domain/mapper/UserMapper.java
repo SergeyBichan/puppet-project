@@ -5,10 +5,11 @@ import com.aston.frontendpracticeservice.domain.entity.User;
 import com.aston.frontendpracticeservice.security.Role;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
 
 import java.util.Set;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface UserMapper {
 
 //    @Mapping(target = "roles", expression = "java(setDefaultRole())")

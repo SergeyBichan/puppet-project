@@ -2,6 +2,7 @@ package com.aston.frontendpracticeservice.controller;
 
 import com.aston.frontendpracticeservice.domain.dto.UserDto;
 import com.aston.frontendpracticeservice.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ public class UserController {
     private final UserService service;
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable("id") @Validated Long id) {
+    public ResponseEntity<UserDto> getUserById(@PathVariable("id") @Valid Long id) {
         UserDto dto = service.findById(id);
         log.info("Get request getUserById - start: {}", dto);
         return new ResponseEntity<>(dto, HttpStatus.OK);
@@ -40,8 +41,8 @@ public class UserController {
 
     @GetMapping("/by-name")
     public ResponseEntity<UserDto> getUserByFirstAndLastName(
-            @RequestParam("firstName") @Validated String firstName,
-            @RequestParam("lastName") @Validated String lastName) {
+            @RequestParam("firstName") @Valid String firstName,
+            @RequestParam("lastName") @Valid String lastName) {
         UserDto dto = service.findByFirstAndLastName(firstName, lastName);
         log.info("Get request getUserByFirstAndLastName - start: {}", dto);
         return new ResponseEntity<>(dto, HttpStatus.OK);
