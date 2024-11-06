@@ -3,3 +3,7 @@ databaseChangeLog:
       file: db/changelog/changeset/sql/create-user-table.sql
   - include:
       file: db/changelog/changeset/sql/add-default-user.sql
+  - include:
+      file: db/changelog/changeset/sql/create-table-user-role.sql
+  - include:
+      file: db/changelog/changeset/sql/add-user-role.sql
