@@ -1,5 +1,6 @@
 package com.aston.frontendpracticeservice.domain.dto;
 
+import com.aston.frontendpracticeservice.security.Role;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
@@ -11,6 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -41,4 +43,6 @@ public class UserDto {
     @NotBlank(message = "Пароль не может быть пустым")
     @Size(min = 8, max = 128, message = "Пароль должен содержать от 8 до 128 символов")
     private String password;
+    @NotBlank
+    private Set<Role> roles;
 }
