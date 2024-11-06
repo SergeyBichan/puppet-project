@@ -4,7 +4,6 @@ import com.aston.frontendpracticeservice.domain.dto.UserDto;
 import com.aston.frontendpracticeservice.domain.entity.User;
 import com.aston.frontendpracticeservice.security.Role;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import java.util.Set;
 
