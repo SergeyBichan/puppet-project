@@ -4,6 +4,7 @@ import com.aston.frontendpracticeservice.config.TestContainersConfig;
 import com.aston.frontendpracticeservice.domain.dto.UserDto;
 import com.aston.frontendpracticeservice.domain.entity.User;
 import com.aston.frontendpracticeservice.exception.UserNotFoundException;
+import com.aston.frontendpracticeservice.security.Role;
 import com.aston.frontendpracticeservice.service.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -14,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 import static org.mockito.Mockito.when;
 
@@ -35,6 +37,7 @@ public class UserServiceTest extends TestContainersConfig {
             .passportNumber("dsad1231231")
             .login("admin")
             .password("admin")
+            .roles(Set.of(Role.ADMIN))
             .build();
 
     @Test
@@ -102,6 +105,7 @@ public class UserServiceTest extends TestContainersConfig {
                 .password(fromDb.getPassword())
                 .snils(fromDb.getSnils())
                 .login(fromDb.getLogin())
+                .roles(fromDb.getRoles())
                 .build();
 
         Assertions.assertEquals(dto, testUser);

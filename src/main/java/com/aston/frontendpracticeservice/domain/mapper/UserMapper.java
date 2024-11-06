@@ -4,6 +4,7 @@ import com.aston.frontendpracticeservice.domain.dto.UserDto;
 import com.aston.frontendpracticeservice.domain.entity.User;
 import com.aston.frontendpracticeservice.security.Role;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.Set;
 
@@ -11,6 +12,7 @@ import java.util.Set;
 public interface UserMapper {
 
 //    @Mapping(target = "roles", expression = "java(setDefaultRole())")
+    @Mapping(target = "roles", source = "roles")
     UserDto toDto(User entity);
 
 //    @Mapping(target = "roles", expression = "java(setDefaultRole())")
