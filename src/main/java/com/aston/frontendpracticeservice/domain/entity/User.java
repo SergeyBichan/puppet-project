@@ -45,7 +45,10 @@ public class User {
     @Column(nullable = false, name = "password")
     private String password;
 
-    @Transient
+    @ElementCollection
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     private Set<Role> roles;
 
     @Override
