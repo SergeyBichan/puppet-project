@@ -29,6 +29,8 @@ public class TestContainersConfig {
 
     public static final DockerImageName POSTGRES_IMAGE = DockerImageName.parse(POSTGRES_IMAGE_NAME);
 
+    public static final String TEST_PROFILE = "test";
+
     @Container
     public static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(POSTGRES_IMAGE)
             .withReuse(true)
@@ -51,6 +53,4 @@ public class TestContainersConfig {
                     SPRING_DATASOURCE_PASSWORD_PROPERTY + postgres.getPassword()).applyTo(context.getEnvironment());
         }
     }
-
-    public static final String TEST_PROFILE = "test";
 }
