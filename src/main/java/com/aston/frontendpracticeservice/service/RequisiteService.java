@@ -1,6 +1,7 @@
 package com.aston.frontendpracticeservice.service;
 
 import com.aston.frontendpracticeservice.domain.dto.RequisitesProjection;
+import com.aston.frontendpracticeservice.exception.UserNotFoundException;
 import com.aston.frontendpracticeservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,8 +15,10 @@ public class RequisiteService {
 
     public RequisitesProjection getRequisites(Long id) {
         if (Objects.isNull(id) || id == 0) {
-            throw new RuntimeException("Incorrect format");
+            throw new IllegalArgumentException("Incorrect format");
         }
-        return repository.findUserWithRequisites(id);
+        return repository.findUserWithRequisites(id).orElseThrow(
+                () -> new UserNotFoundException("User with id:" + id + " not found!")
+        );
     }
 }
