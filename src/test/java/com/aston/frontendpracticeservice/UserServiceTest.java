@@ -3,22 +3,17 @@ package com.aston.frontendpracticeservice;
 import com.aston.frontendpracticeservice.config.TestContainersConfig;
 import com.aston.frontendpracticeservice.domain.dto.RequisitesProjection;
 import com.aston.frontendpracticeservice.domain.dto.UserDto;
-import com.aston.frontendpracticeservice.domain.entity.Requisites;
 import com.aston.frontendpracticeservice.domain.entity.User;
-import com.aston.frontendpracticeservice.domain.mapper.UserMapper;
 import com.aston.frontendpracticeservice.exception.UserNotFoundException;
 import com.aston.frontendpracticeservice.security.Role;
 import com.aston.frontendpracticeservice.service.RequisiteService;
 import com.aston.frontendpracticeservice.service.UserService;
-import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mapstruct.Mapper;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -34,8 +29,6 @@ public class UserServiceTest extends TestContainersConfig {
     private RequisiteService requisiteService;
     @Mock
     private UserService userService1;
-    @Autowired
-    private UserMapper userMapper;
 
     UserDto testUser = UserDto.builder()
             .id(1L)
