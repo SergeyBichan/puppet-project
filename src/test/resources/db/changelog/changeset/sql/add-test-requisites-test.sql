@@ -1,4 +1,4 @@
-INSERT INTO requisites (account_num, correspondent_account_number, inn, kpp, kbk, user_id)
+INSERT INTO requisites (account_number, correspondent_account_number, inn, kpp, kbk, user_id)
 VALUES (
             'fds',
         'fds',

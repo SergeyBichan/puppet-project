@@ -4,6 +4,10 @@ databaseChangeLog:
   - include:
       file: db/changelog/changeset/sql/add-default-user-test.sql
   - include:
+      file: db/changelog/changeset/sql/create-table-user-role-test.sql
+  - include:
+      file: db/changelog/changeset/sql/add-user-role-test.sql
+  - include:
       file: db/changelog/changeset/sql/create-table-requisites-test.sql
   - include:
       file: db/changelog/changeset/sql/add-test-requisites-test.sql

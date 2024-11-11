@@ -1,6 +1,6 @@
 CREATE TABLE requisites (
                             id SERIAL PRIMARY KEY,
-                            account_num VARCHAR(255),
+                            account_number VARCHAR(255),
                             correspondent_account_number VARCHAR(255),
                             inn VARCHAR(12),
                             kpp VARCHAR(9),

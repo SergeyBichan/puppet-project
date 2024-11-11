@@ -24,7 +24,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAll();
 
     @Query("SELECT new com.aston.frontendpracticeservice.domain.dto.RequisitesProjection" +
-            "(u.firstName, u.lastName, r.accountnum, r.kbk) " +
+            "(u.firstName, u.lastName, r.accountNumber, r.kbk) " +
             "FROM Requisites r JOIN r.user u WHERE u.id=:id")
     RequisitesProjection findUserWithRequisites(Long id);
 }

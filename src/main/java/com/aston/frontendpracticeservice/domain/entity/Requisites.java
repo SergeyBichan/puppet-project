@@ -29,8 +29,8 @@ public class Requisites {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "account_num")
-    private String accountnum;
+    @Column(name = "account_number")
+    private String accountNumber;
 
     @Column(name = "correspondent_account_number")
     private String correspondentAccountNumber;
