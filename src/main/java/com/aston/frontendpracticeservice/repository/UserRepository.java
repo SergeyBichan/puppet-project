@@ -17,6 +17,7 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByLogin(String login);
+
     @EntityGraph(value = "roles", type = EntityGraph.EntityGraphType.LOAD)
     Optional<User> findByFirstNameAndLastName(String firstName, String lastName);
 
@@ -26,5 +27,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT new com.aston.frontendpracticeservice.domain.dto.RequisitesProjection" +
             "(u.firstName, u.lastName, r.accountNumber, r.kbk) " +
             "FROM Requisites r JOIN r.user u WHERE u.id=:id")
-   Optional<RequisitesProjection> findUserWithRequisites(Long id);
+    Optional<RequisitesProjection> findUserWithRequisites(Long id);
 }
