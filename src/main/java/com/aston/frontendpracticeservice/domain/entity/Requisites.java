@@ -44,7 +44,7 @@ public class Requisites {
     @Column(name = "kbk")
     private String kbk;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
 }
