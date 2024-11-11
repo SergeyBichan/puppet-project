@@ -1,14 +1,20 @@
 package com.aston.frontendpracticeservice;
 
 import com.aston.frontendpracticeservice.config.TestContainersConfig;
+import com.aston.frontendpracticeservice.domain.dto.RequisitesProjection;
 import com.aston.frontendpracticeservice.domain.dto.UserDto;
+import com.aston.frontendpracticeservice.domain.entity.Requisites;
 import com.aston.frontendpracticeservice.domain.entity.User;
+import com.aston.frontendpracticeservice.domain.mapper.UserMapper;
 import com.aston.frontendpracticeservice.exception.UserNotFoundException;
 import com.aston.frontendpracticeservice.security.Role;
+import com.aston.frontendpracticeservice.service.RequisiteService;
 import com.aston.frontendpracticeservice.service.UserService;
+import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.Mapper;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,8 +30,12 @@ public class UserServiceTest extends TestContainersConfig {
 
     @Autowired
     private UserService service;
+    @Autowired
+    private RequisiteService requisiteService;
     @Mock
     private UserService userService1;
+    @Autowired
+    private UserMapper userMapper;
 
     UserDto testUser = UserDto.builder()
             .id(1L)
@@ -89,7 +99,6 @@ public class UserServiceTest extends TestContainersConfig {
         Assertions.assertTrue(expectedMessage.contains(actualMessage));
     }
 
-
     @Test
     @DisplayName("Проверка наличия пользователя с конкретным логином")
     public void shouldReturnUserWithExistLogin() {
@@ -113,7 +122,7 @@ public class UserServiceTest extends TestContainersConfig {
 
     @Test
     @DisplayName("Проверка на не существующего пользователя с конкретным логином")
-    public void shouldReturnExceptionUserNotFoundExceptionWithNotExistedUser(){
+    public void shouldReturnExceptionUserNotFoundExceptionWithNotExistedUser() {
         Exception exception = Assertions.assertThrows(UserNotFoundException.class,
                 () -> service.findByLogin("карасик"));
 
@@ -125,7 +134,7 @@ public class UserServiceTest extends TestContainersConfig {
 
     @Test
     @DisplayName("Проверка на наличие поьзователя в БД по имени и фамилии")
-    public void shouldReturnExistUserFromDbWithFirstNameAndLasName(){
+    public void shouldReturnExistUserFromDbWithFirstNameAndLasName() {
         UserDto fromDb = service.findByFirstAndLastName("Sergey", "Bichan");
 
         Assertions.assertEquals(testUser, fromDb);
@@ -142,5 +151,19 @@ public class UserServiceTest extends TestContainersConfig {
         String actualMessage = exception.getMessage();
 
         Assertions.assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    @DisplayName("Проверка на правильность возвращаемых реквизитов из БД")
+    public void shouldReturnCorrectRequisites() {
+        RequisitesProjection requisites = requisiteService.getRequisites(1L);
+        RequisitesProjection testRequisites = RequisitesProjection.builder()
+                .accountNumber("fds")
+                .firstName("Sergey")
+                .lastName("Bichan")
+                .kbk("fds")
+                .build();
+
+        Assertions.assertEquals(testRequisites, requisites);
     }
 }
