@@ -28,19 +28,19 @@ public class Requisites {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "account_number")
+    @Column(name = "account_number", nullable = false)
     private String accountNumber;
 
-    @Column(name = "correspondent_account_number")
+    @Column(name = "correspondent_account_number", nullable = false)
     private String correspondentAccountNumber;
 
-    @Column(name = "inn")
+    @Column(name = "inn", nullable = false)
     private String inn;
 
-    @Column(name = "kpp")
+    @Column(name = "kpp", nullable = false)
     private String kpp;
 
-    @Column(name = "kbk")
+    @Column(name = "kbk", nullable = false)
     private String kbk;
 
     @OneToOne

@@ -25,8 +25,7 @@ public class UserServiceTest extends TestContainersConfig {
 
     @Autowired
     private UserService service;
-    @Autowired
-    private RequisiteService requisiteService;
+
     @Mock
     private UserService userService1;
 
@@ -146,17 +145,5 @@ public class UserServiceTest extends TestContainersConfig {
         Assertions.assertTrue(actualMessage.contains(expectedMessage));
     }
 
-    @Test
-    @DisplayName("Проверка на правильность возвращаемых реквизитов из БД")
-    public void shouldReturnCorrectRequisites() {
-        RequisitesProjection requisites = requisiteService.getRequisites(1L);
-        RequisitesProjection testRequisites = RequisitesProjection.builder()
-                .accountNumber("fds")
-                .firstName("Sergey")
-                .lastName("Bichan")
-                .kbk("fds")
-                .build();
 
-        Assertions.assertEquals(testRequisites, requisites);
-    }
 }

@@ -1,7 +1,7 @@
 CREATE TABLE users (
                        id SERIAL PRIMARY KEY,
-                       first_name VARCHAR(255) NOT NULL,
-                       last_name VARCHAR(255) NOT NULL,
+                       first_name VARCHAR(25) NOT NULL,
+                       last_name VARCHAR(25) NOT NULL,
                        birth_date DATE NOT NULL,
                        inn VARCHAR(12) NOT NULL UNIQUE,
                        snils VARCHAR(11) NOT NULL UNIQUE,
