@@ -5,7 +5,6 @@ import com.aston.frontendpracticeservice.domain.response.SimpleMessage;
 import com.aston.frontendpracticeservice.exception.AuthException;
 import com.aston.frontendpracticeservice.exception.UserNotFoundException;
 import io.jsonwebtoken.JwtException;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.InvalidMediaTypeException;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,6 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.Map;
 
-@Slf4j
 @RestControllerAdvice
 public class ControllerExceptionHandler {
 
