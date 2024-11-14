@@ -24,6 +24,7 @@ public class UserServiceTest extends TestContainersConfig {
 
     @Autowired
     private UserService service;
+
     @Mock
     private UserService userService1;
 
@@ -89,7 +90,6 @@ public class UserServiceTest extends TestContainersConfig {
         Assertions.assertTrue(expectedMessage.contains(actualMessage));
     }
 
-
     @Test
     @DisplayName("Проверка наличия пользователя с конкретным логином")
     public void shouldReturnUserWithExistLogin() {
@@ -113,7 +113,7 @@ public class UserServiceTest extends TestContainersConfig {
 
     @Test
     @DisplayName("Проверка на не существующего пользователя с конкретным логином")
-    public void shouldReturnExceptionUserNotFoundExceptionWithNotExistedUser(){
+    public void shouldReturnExceptionUserNotFoundExceptionWithNotExistedUser() {
         Exception exception = Assertions.assertThrows(UserNotFoundException.class,
                 () -> service.findByLogin("карасик"));
 
@@ -125,7 +125,7 @@ public class UserServiceTest extends TestContainersConfig {
 
     @Test
     @DisplayName("Проверка на наличие поьзователя в БД по имени и фамилии")
-    public void shouldReturnExistUserFromDbWithFirstNameAndLasName(){
+    public void shouldReturnExistUserFromDbWithFirstNameAndLasName() {
         UserDto fromDb = service.findByFirstAndLastName("Sergey", "Bichan");
 
         Assertions.assertEquals(testUser, fromDb);
@@ -143,4 +143,6 @@ public class UserServiceTest extends TestContainersConfig {
 
         Assertions.assertTrue(actualMessage.contains(expectedMessage));
     }
+
+
 }

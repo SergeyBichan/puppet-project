@@ -15,6 +15,7 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByLogin(String login);
+
     @EntityGraph(value = "roles", type = EntityGraph.EntityGraphType.LOAD)
     Optional<User> findByFirstNameAndLastName(String firstName, String lastName);
 
