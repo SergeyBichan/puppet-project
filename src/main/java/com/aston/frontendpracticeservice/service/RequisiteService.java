@@ -14,8 +14,8 @@ public class RequisiteService {
     private final RequisitesRepository repository;
 
     public RequisitesProjection getRequisites(Long id) {
-        if (Objects.isNull(id) || id == 0) {
-            throw new IllegalArgumentException("Incorrect format");
+        if (id < 1) {
+            throw new IllegalArgumentException("id is invalid");
         }
         return repository.findUserWithRequisites(id).orElseThrow(
                 () -> new UserNotFoundException("User with id:" + id + " not found!")
