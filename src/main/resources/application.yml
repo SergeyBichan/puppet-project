@@ -26,16 +26,20 @@ spring:
     enabled: true
   kafka:
     producer:
-      acks: -1
-      bootstrap-servers: localhost:9092
+      bootstrap-servers: localhost:29092
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.Jackson2JsonSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+
     consumer:
-      bootstrap-servers: localhost:9092
+      bootstrap-servers: localhost:29092
       group-id: my-consumer-group
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.Jackson2JsonDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: com.aston.frontendpracticeservice.domain.dto
+
 logging:
   level:
     web: DEBUG
