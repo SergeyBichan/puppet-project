@@ -6,6 +6,6 @@ CREATE TABLE users (
                        inn VARCHAR(12) NOT NULL UNIQUE,
                        snils VARCHAR(11) NOT NULL UNIQUE,
                        passport_number VARCHAR(20) NOT NULL UNIQUE,
-                       login VARCHAR(50) NOT NULL UNIQUE,
+                       login VARCHAR(50) NOT NULL,
                        password VARCHAR(255) NOT NULL
 );
