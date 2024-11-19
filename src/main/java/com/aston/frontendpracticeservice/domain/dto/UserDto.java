@@ -10,6 +10,9 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -20,6 +23,9 @@ import static com.aston.frontendpracticeservice.domain.dto.validation.Constants.
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 @EqualsAndHashCode
 public class UserDto {
 
