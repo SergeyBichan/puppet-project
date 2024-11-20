@@ -39,6 +39,8 @@ spring:
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring.json.trusted.packages: com.aston.frontendpracticeservice.domain.dto
+        spring.json.value.default.type: com.aston.frontendpracticeservice.domain.dto.UserDto
+        spring.json.use.type.headers: false
 
 logging:
   level:
