@@ -4,8 +4,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -17,6 +20,7 @@ import org.testcontainers.utility.DockerImageName;
 
 @ActiveProfiles(TestContainersConfig.TEST_PROFILE)
 @Testcontainers
+@DirtiesContext
 @AutoConfigureMockMvc(addFilters = false)
 @ContextConfiguration(initializers = {TestContainersConfig.Initializer.class})
 public class TestContainersConfig {
@@ -45,12 +49,23 @@ public class TestContainersConfig {
 
     @Container
     public static final KafkaContainer kafka = new KafkaContainer(KAFKA_IMAGE)
+            //становить нужный адрес для последующего подключения в тестах
+            .withKraft()
             .withNetwork(Network.SHARED);
+
+    @DynamicPropertySource
+    static void overrideProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.kafka.bootstrap-servers", kafka::getBootstrapServers);
+    }
 
     static {
         Startables.deepStart(postgres).join();
         Startables.deepStart(kafka).join();
     }
+
+
+
+
 
     public static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
@@ -62,6 +77,7 @@ public class TestContainersConfig {
                     SPRING_DATASOURCE_PASSWORD_PROPERTY + postgres.getPassword(),
                     SPRING_KAFKA_BOOTSTRAP_SERVERS_PROPERTY + kafka.getBootstrapServers())
                     .applyTo(context.getEnvironment());
+            System.err.println("PIZDA " + kafka.getBootstrapServers());
         }
     }
 }
