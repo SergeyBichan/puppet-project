@@ -4,11 +4,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -17,10 +14,11 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.lifecycle.Startables;
 import org.testcontainers.utility.DockerImageName;
 
+import java.util.stream.Stream;
+
 
 @ActiveProfiles(TestContainersConfig.TEST_PROFILE)
 @Testcontainers
-@DirtiesContext
 @AutoConfigureMockMvc(addFilters = false)
 @ContextConfiguration(initializers = {TestContainersConfig.Initializer.class})
 public class TestContainersConfig {
@@ -32,7 +30,8 @@ public class TestContainersConfig {
     public static final String SPRING_DATASOURCE_USERNAME_PROPERTY = "spring.datasource.username=";
     public static final String SPRING_DATASOURCE_PASSWORD_PROPERTY = "spring.datasource.password=";
     public static final String KAFKA_IMAGE_NAME = "confluentinc/cp-kafka:latest";
-    public static final String SPRING_KAFKA_BOOTSTRAP_SERVERS_PROPERTY = "spring.kafka.bootstrap-servers=";
+    public static final String SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS_PROPERTY = "spring.kafka.producer.bootstrap-servers=";
+    public static final String SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS_PROPERTY = "spring.kafka.consumer.bootstrap-servers=";
 
     public static final DockerImageName POSTGRES_IMAGE = DockerImageName.parse(POSTGRES_IMAGE_NAME);
     public static final DockerImageName KAFKA_IMAGE = DockerImageName.parse(KAFKA_IMAGE_NAME);
@@ -49,35 +48,25 @@ public class TestContainersConfig {
 
     @Container
     public static final KafkaContainer kafka = new KafkaContainer(KAFKA_IMAGE)
-            //становить нужный адрес для последующего подключения в тестах
-            .withKraft()
-            .withNetwork(Network.SHARED);
-
-    @DynamicPropertySource
-    static void overrideProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.kafka.bootstrap-servers", kafka::getBootstrapServers);
-    }
+            .withNetwork(Network.SHARED)
+            .withKraft();
 
     static {
-        Startables.deepStart(postgres).join();
-        Startables.deepStart(kafka).join();
+        Startables.deepStart(Stream.of(postgres, kafka)).join();
     }
-
-
-
-
 
     public static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
         @Override
         public void initialize(ConfigurableApplicationContext context) {
             TestPropertyValues.of(
-                    SPRING_DATASOURCE_URL_PROPERTY + postgres.getJdbcUrl(),
-                    SPRING_DATASOURCE_USERNAME_PROPERTY + postgres.getUsername(),
-                    SPRING_DATASOURCE_PASSWORD_PROPERTY + postgres.getPassword(),
-                    SPRING_KAFKA_BOOTSTRAP_SERVERS_PROPERTY + kafka.getBootstrapServers())
+                            SPRING_DATASOURCE_URL_PROPERTY + postgres.getJdbcUrl(),
+                            SPRING_DATASOURCE_USERNAME_PROPERTY + postgres.getUsername(),
+                            SPRING_DATASOURCE_PASSWORD_PROPERTY + postgres.getPassword(),
+                            SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS_PROPERTY + kafka.getBootstrapServers(),
+                            SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS_PROPERTY + kafka.getBootstrapServers())
                     .applyTo(context.getEnvironment());
-            System.err.println("PIZDA " + kafka.getBootstrapServers());
+
         }
     }
 }

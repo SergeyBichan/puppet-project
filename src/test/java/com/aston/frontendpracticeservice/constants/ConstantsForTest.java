@@ -18,4 +18,7 @@ public class ConstantsForTest {
             "    \"login\": \"admin\",\n" +
             "    \"password\": \"admin\"\n" +
             "}";
+
+    public static final String TOPIC_FOR_KAFKA = "test";
+    public static final String GROUP_FOR_CONSUMER = "test-consumer";
 }
