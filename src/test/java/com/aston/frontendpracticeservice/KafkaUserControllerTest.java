@@ -5,9 +5,7 @@ import com.aston.frontendpracticeservice.domain.dto.UserDto;
 import com.aston.frontendpracticeservice.security.Role;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,6 +21,7 @@ import static com.aston.frontendpracticeservice.constants.ConstantsForTest.TOPIC
 @Slf4j
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class KafkaUserControllerTest extends TestContainersConfig {
 
     @Autowired
@@ -41,7 +40,7 @@ public class KafkaUserControllerTest extends TestContainersConfig {
             .roles(Set.of(Role.ADMIN))
             .build();
 
-    private UserDto receivedMessage;
+    private static UserDto receivedMessage;
 
     @KafkaListener(topics = TOPIC_FOR_KAFKA, groupId = GROUP_FOR_CONSUMER)
     public void listen(ConsumerRecord<String, UserDto> record) {
@@ -49,10 +48,19 @@ public class KafkaUserControllerTest extends TestContainersConfig {
     }
 
     @Test
+    @Order(1)
     @DisplayName(value = "Тест на отправку и получение сообщение из брокера")
     public void testKafkaMessageReceiving() throws InterruptedException {
         kafkaTemplate.send(TOPIC_FOR_KAFKA, userDto);
         Thread.sleep(5000);
         Assertions.assertEquals(userDto, receivedMessage);
+    }
+
+    @Test
+    @Order(2)
+    public void testMessageFromKafkaShouldBeNotNull() throws InterruptedException {
+//        kafkaTemplate.send(TOPIC_FOR_KAFKA, userDto);
+        Thread.sleep(6000);
+        Assertions.assertNotNull(receivedMessage);
     }
 }
