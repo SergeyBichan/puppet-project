@@ -59,7 +59,6 @@ public class KafkaUserControllerTest extends TestContainersConfig {
     @Test
     @Order(2)
     public void testMessageFromKafkaShouldBeNotNull() throws InterruptedException {
-//        kafkaTemplate.send(TOPIC_FOR_KAFKA, userDto);
         Thread.sleep(6000);
         Assertions.assertNotNull(receivedMessage);
     }
