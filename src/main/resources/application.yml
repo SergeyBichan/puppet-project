@@ -25,6 +25,8 @@ spring:
     change-log: classpath:db/changelog/db.changelog-master.yaml
     enabled: true
   kafka:
+    listener:
+      ack-mode: manual
     producer:
       bootstrap-servers: localhost:29092
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
@@ -34,6 +36,7 @@ spring:
       bootstrap-servers: localhost:29092
       group-id: my-consumer-group
       auto-offset-reset: earliest
+      enable-auto-commit: false
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:

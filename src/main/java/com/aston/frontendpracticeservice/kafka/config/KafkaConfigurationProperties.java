@@ -1,4 +1,4 @@
-package com.aston.frontendpracticeservice.kafka.constants;
+package com.aston.frontendpracticeservice.kafka.config;
 
 import lombok.Getter;
 import lombok.Setter;
