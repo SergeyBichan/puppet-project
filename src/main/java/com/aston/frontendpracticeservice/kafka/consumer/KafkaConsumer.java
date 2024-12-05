@@ -22,6 +22,7 @@ public class KafkaConsumer {
             acknowledgment.acknowledge();
             log.info("Сообщение {} обработано!", userDto);
         } catch (Exception e) {
+            log.warn("Сообщение не прочитано");
             throw new RuntimeException(e);
         }
         return future;
