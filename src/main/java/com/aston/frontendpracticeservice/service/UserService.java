@@ -4,11 +4,13 @@ import com.aston.frontendpracticeservice.domain.dto.UserDto;
 import com.aston.frontendpracticeservice.domain.entity.User;
 import com.aston.frontendpracticeservice.domain.mapper.UserMapper;
 import com.aston.frontendpracticeservice.exception.UserNotFoundException;
+import com.aston.frontendpracticeservice.kafka.producer.KafkaProducer;
 import com.aston.frontendpracticeservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +18,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper mapper;
+    private final KafkaProducer kafkaProducer;
 
     public User findByLogin(String login) {
         return userRepository.findByLogin(login)
@@ -42,8 +45,10 @@ public class UserService {
     }
 
     public UserDto findById(Long id) {
-        return userRepository.findById(id)
-                .map(mapper::toDto)
+        Optional<UserDto> userFromDb = userRepository.findById(id)
+                .map(mapper::toDto);
+        userFromDb.ifPresent(kafkaProducer::sendAsyncMessage);
+        return userFromDb
                 .orElseThrow(() -> new UserNotFoundException("User with id:" + id + " not found"));
     }
 }

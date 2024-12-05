@@ -1,0 +1,52 @@
+jwt:
+  secret: 357638792F423F4428472B4B6250655368566D597133743677397A2443264629
+
+auth:
+  default_login: admin
+  default_password: admin
+  refresh_token_life_seconds: 60
+  access_token_life_seconds: 1
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/user_db
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    enabled: true
+  kafka:
+    listener:
+      ack-mode: manual
+    producer:
+      bootstrap-servers: localhost:29092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+    consumer:
+      bootstrap-servers: localhost:29092
+      group-id: my-consumer-group
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: com.aston.frontendpracticeservice.domain.dto
+        spring.json.value.default.type: com.aston.frontendpracticeservice.domain.dto.UserDto
+        spring.json.use.type.headers: false
+    topic: g_topic
+    group-id: my-consumer-group
+#logging:
+#  level:
+#    web: DEBUG
+#    org.springframework.web: DEBUG
+#    org.apache.cxf: DEBUG
