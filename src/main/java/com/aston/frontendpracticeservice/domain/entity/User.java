@@ -25,6 +25,7 @@ import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -38,7 +39,7 @@ import java.util.Set;
 @Table(name = "users")
 @NamedEntityGraph(name = "roles",
         attributeNodes = @NamedAttributeNode("roles"))
-public class User {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

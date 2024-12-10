@@ -3,13 +3,18 @@ package com.aston.frontendpracticeservice.service;
 import com.aston.frontendpracticeservice.domain.dto.UserDto;
 import com.aston.frontendpracticeservice.domain.entity.User;
 import com.aston.frontendpracticeservice.domain.mapper.UserMapper;
+import com.aston.frontendpracticeservice.exception.UserIsFoundException;
 import com.aston.frontendpracticeservice.exception.UserNotFoundException;
 import com.aston.frontendpracticeservice.kafka.producer.KafkaProducer;
 import com.aston.frontendpracticeservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -25,9 +30,10 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 
+    @Transactional(readOnly = true)
     public List<UserDto> findAll() {
         List<User> allUsers = userRepository.findAll();
-        if (allUsers.isEmpty()){
+        if (allUsers.isEmpty()) {
             throw new UserNotFoundException("Users not found");
         }
         return allUsers
@@ -36,6 +42,8 @@ public class UserService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
+    @Cacheable(value = "UserService::getByFistAndLastName", key = "#firstName + '.' + #lastName")
     public UserDto findByFirstAndLastName(String firstName, String lastName) {
         return userRepository.findByFirstNameAndLastName(firstName, lastName)
                 .map(mapper::toDto)
@@ -44,11 +52,34 @@ public class UserService {
                 ));
     }
 
+    @Transactional(readOnly = true)
     public UserDto findById(Long id) {
         Optional<UserDto> userFromDb = userRepository.findById(id)
                 .map(mapper::toDto);
         userFromDb.ifPresent(kafkaProducer::sendAsyncMessage);
         return userFromDb
                 .orElseThrow(() -> new UserNotFoundException("User with id:" + id + " not found"));
+    }
+
+    @Transactional
+    @CacheEvict(value = "UserService::getById", key = "#id")
+    public void deleteUserById(Long id) {
+        User userFromDb = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+        if (Objects.nonNull(userFromDb)) {
+            userRepository.delete(userFromDb);
+        }
+    }
+
+    @Transactional
+    public void createUser(UserDto userDto) {
+        userRepository
+                .findByFirstNameAndLastName(userDto.getFirstName(), userDto.getLastName())
+                .ifPresentOrElse(
+                        user -> {
+                            throw new UserIsFoundException("User already exists");
+                        },
+                        () -> userRepository.save(mapper.toUser(userDto))
+                );
     }
 }

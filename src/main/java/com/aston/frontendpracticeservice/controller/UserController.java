@@ -1,17 +1,14 @@
 package com.aston.frontendpracticeservice.controller;
 
 import com.aston.frontendpracticeservice.domain.dto.UserDto;
+import com.aston.frontendpracticeservice.domain.mapper.UserMapper;
 import com.aston.frontendpracticeservice.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
@@ -21,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("api/v1/users")
 public class UserController {
+    private final UserMapper userMapper;
 
     private final UserService service;
 
@@ -32,7 +30,7 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<UserDto>> getAllUsers(){
+    public ResponseEntity<List<UserDto>> getAllUsers() {
         List<UserDto> all = service.findAll();
         log.info("Get request getAllUsers - start: {}", all);
         return new ResponseEntity<>(all, HttpStatus.OK);
@@ -45,5 +43,19 @@ public class UserController {
         UserDto dto = service.findByFirstAndLastName(firstName, lastName);
         log.info("Get request getUserByFirstAndLastName - start: {}", dto);
         return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
+    @GetMapping("/delete")
+    public ResponseEntity<String> deleteUserById(@RequestParam("id") @Valid Long id) {
+        service.deleteUserById(id);
+        log.info("Get request deleteUserById - start: {}", id);
+        return new ResponseEntity<>("User deleted with id:" + id, HttpStatus.OK);
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<UserDto> createUser(@RequestBody @Valid UserDto userDto) {
+        service.createUser(userDto);
+        log.info("Post request createUser - start: {}", userDto);
+        return new ResponseEntity<>(userDto, HttpStatus.CREATED);
     }
 }
