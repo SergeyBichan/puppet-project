@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -27,7 +28,7 @@ import static com.aston.frontendpracticeservice.domain.dto.validation.Constants.
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class UserDto {
+public class UserDto implements Serializable {
 
     private Long id;
     @NotBlank(message = "First name can't be blank")

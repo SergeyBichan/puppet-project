@@ -9,7 +9,9 @@ import com.aston.frontendpracticeservice.kafka.producer.KafkaProducer;
 import com.aston.frontendpracticeservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,6 +55,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "UserService::getById", key = "#id")
     public UserDto findById(Long id) {
         Optional<UserDto> userFromDb = userRepository.findById(id)
                 .map(mapper::toDto);
@@ -72,6 +75,10 @@ public class UserService {
     }
 
     @Transactional
+    @Caching(put = {
+            @CachePut(value = "UserService::getById", key = "#userDto.id"),
+            @CachePut(value = "UserService::getByFistAndLastName", key = "#userDto.firstName + '.' + #userDto.lastName")
+    })
     public void createUser(UserDto userDto) {
         userRepository
                 .findByFirstNameAndLastName(userDto.getFirstName(), userDto.getLastName())
