@@ -9,6 +9,8 @@ auth:
 
 spring:
   cache:
+    redis:
+      time-to-live: 18000000 #The value is specified in milliseconds, so 18000000 represents 30 minutes (30 * 60 * 1000 = 18000000 ms)
     type: redis
     cache-names: redis-cache
   data:
